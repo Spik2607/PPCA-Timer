@@ -203,7 +203,7 @@ function App() {
         </div>
 
     <img 
-  src={process.env.PUBLIC_URL + '/images/logo.png'} 
+  src={process.env.PUBLIC_URL + '/images/logo.png'}  // Chemin corrigé
   alt="Ping Pong Club Airvault" 
   className="w-full max-w-md mx-auto mb-8" 
 />
