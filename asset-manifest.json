@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/PPCA-Timer/static/css/main.f45afe79.css",
+    "main.js": "/PPCA-Timer/static/js/main.7e0652a4.js",
+    "index.html": "/PPCA-Timer/index.html",
+    "main.f45afe79.css.map": "/PPCA-Timer/static/css/main.f45afe79.css.map",
+    "main.7e0652a4.js.map": "/PPCA-Timer/static/js/main.7e0652a4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f45afe79.css",
+    "static/js/main.7e0652a4.js"
+  ]
+}
