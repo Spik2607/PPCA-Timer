@@ -203,7 +203,7 @@ function App() {
         </div>
 
       <img 
-  src={process.env.PUBLIC_URL + '/PPCA-Timer/images/logo.svg'} 
+  src={process.env.PUBLIC_URL + '/PPCA-Timer/images/logo.png'} 
   alt="Ping Pong Club Airvault" 
   className="w-full max-w-md mx-auto mb-8" 
 />
