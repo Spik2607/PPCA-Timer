@@ -100,6 +100,31 @@ function App() {
     pauseMinutes: 2
   });
 
+  // Empêcher la mise en veille
+  useEffect(() => {
+    let wakeLock = null;
+    
+    const requestWakeLock = async () => {
+      try {
+        wakeLock = await navigator.wakeLock.request('screen');
+      } catch (err) {
+        console.log(`${err.name}, ${err.message}`);
+      }
+    };
+
+    requestWakeLock();
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        requestWakeLock();
+      }
+    });
+
+    return () => {
+      if (wakeLock) wakeLock.release();
+    };
+  }, []);
+
   useEffect(() => {
     let interval = null;
 
@@ -124,19 +149,16 @@ function App() {
       }
 
       if (!isPause) {
-        // Fin de l'exercice, passer à la pause
         setSeconds(settings.pauseMinutes * 60);
         setIsPause(true);
         setIsActive(true);
       } else {
-        // Fin de la pause
         if (currentSet < totalSets) {
           setSeconds(settings.exerciseMinutes * 60);
           setIsPause(false);
           setCurrentSet(prev => prev + 1);
           setIsActive(true);
         } else {
-          // Fin de toutes les séries
           setIsActive(false);
           setIsPause(false);
           setCurrentSet(1);
@@ -186,7 +208,7 @@ function App() {
 
   return (
     <div className={`flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 ${isFullscreen ? 'fixed inset-0 z-50' : ''}`}>
-      <div className="bg-white rounded-lg shadow-xl p-6 md:p-8 w-full max-w-2xl">
+      <div className="bg-white rounded-lg shadow-xl p-4 md:p-6 w-full max-w-2xl">
         <div className="flex justify-between mb-4">
           <button
             onClick={() => setShowSettings(true)}
@@ -202,18 +224,20 @@ function App() {
           </button>
         </div>
 
-    <img 
-  src={process.env.PUBLIC_URL + '/images/logo.png'}  // Chemin corrigé
-  alt="Ping Pong Club Airvault" 
-  className="w-full max-w-md mx-auto mb-8" 
-/>
+        <div className="h-[15vh] md:h-[20vh] flex items-center justify-center mb-4">
+          <img 
+            src={process.env.PUBLIC_URL + '/images/logo.png'} 
+            alt="Ping Pong Club Airvault" 
+            className="h-full w-auto object-contain" 
+          />
+        </div>
 
-        <div className="text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
             {isPause ? "Pause" : "Exercice"}
           </h2>
           
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center justify-center gap-4 mb-4">
             <button 
               onClick={() => adjustTotalSets(-1)}
               disabled={isActive || totalSets <= 1}
@@ -221,7 +245,7 @@ function App() {
             >
               <Minus size={20} />
             </button>
-            <span className="text-xl md:text-2xl">
+            <span className="text-lg md:text-xl">
               Série {currentSet}/{totalSets}
             </span>
             <button 
@@ -233,31 +257,31 @@ function App() {
             </button>
           </div>
 
-          <div className="text-7xl md:text-8xl font-mono font-bold mb-8">
+          <div className="text-5xl md:text-7xl font-mono font-bold mb-6">
             {formatTime(seconds)}
           </div>
         </div>
 
-        <div className="flex justify-center gap-6">
+        <div className="flex justify-center gap-4">
           <button 
             onClick={toggleTimer}
-            className="p-6 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="p-4 md:p-6 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            {isActive ? <Pause size={32} /> : <Play size={32} />}
+            {isActive ? <Pause size={28} /> : <Play size={28} />}
           </button>
           
           <button 
             onClick={resetTimer}
-            className="p-6 rounded-full bg-gray-500 text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="p-4 md:p-6 rounded-full bg-gray-500 text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
-            <RotateCcw size={32} />
+            <RotateCcw size={28} />
           </button>
 
           <button
             onClick={() => setSoundEnabled(!soundEnabled)}
-            className="p-6 rounded-full bg-gray-500 text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            className="p-4 md:p-6 rounded-full bg-gray-500 text-white hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
-            {soundEnabled ? <Volume2 size={32} /> : <VolumeX size={32} />}
+            {soundEnabled ? <Volume2 size={28} /> : <VolumeX size={28} />}
           </button>
         </div>
       </div>
